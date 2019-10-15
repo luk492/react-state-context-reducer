@@ -1,13 +1,14 @@
 import React from 'react';
 import './App.css';
-import Red from './components/reducer/reducer';
 import { StateProvider } from './components/state-provider/state-provider';
 import ThemedButton from './components/themed-buttom/themed-button';
+import { useStateValue } from './components/state-provider/state-provider';
 
 function App() {
 
   const initialState = {
-    theme: { primary: 'green' }
+    theme: { primary: 'green' },
+    counter: 0
   };
   
   const reducer = (state, action) => {
@@ -17,16 +18,28 @@ function App() {
           ...state,
           theme: action.newTheme
         };
+      case 'increment':
+        return {
+          ...state,
+          counter: state.counter + 1
+        };
         
       default:
         return state;
     }
   };
 
+  const IncBtn = () => {
+    const [{ counter }, dispatch] = useStateValue();
+    return (
+      <button onClick={() => dispatch({type:'increment'})}>Click {counter}</button>
+    );
+  }
+
   return (
     <StateProvider initialState={initialState} reducer={reducer}>
       <div className="App">
-        <Red clicks="Clicks" />
+        <IncBtn />
         <ThemedButton>Dugme</ThemedButton>
       </div>
     </StateProvider>
