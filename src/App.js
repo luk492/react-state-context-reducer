@@ -1,25 +1,35 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
+import Red from './components/reducer/reducer';
+import { StateProvider } from './components/state-provider/state-provider';
+import ThemedButton from './components/themed-buttom/themed-button';
 
 function App() {
+
+  const initialState = {
+    theme: { primary: 'green' }
+  };
+  
+  const reducer = (state, action) => {
+    switch (action.type) {
+      case 'changeTheme':
+        return {
+          ...state,
+          theme: action.newTheme
+        };
+        
+      default:
+        return state;
+    }
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <StateProvider initialState={initialState} reducer={reducer}>
+      <div className="App">
+        <Red clicks="Clicks" />
+        <ThemedButton>Dugme</ThemedButton>
+      </div>
+    </StateProvider>
   );
 }
 
